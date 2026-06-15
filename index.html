@@ -568,7 +568,7 @@ function endGame(win){if(G.over)return;G.over=true;G.win=win;if(raf)cancelAnimat
    to connect the leaderboard to your Google Sheet and enable the
    "email ID card to #1" feature. Leave "" to run locally. See README.
    ================================================================= */
-const BACKEND_URL="";
+const BACKEND_URL="https://script.google.com/macros/s/AKfycbwNIF99wlj01oFlxPX7Xi-DsC30wcAWcGNv86CMzqkGoKRgyPDx_Bx0LdRNuJONESJX/exec";
 const LB_KEY='monty_leaderboard_v1';let memLB=[];let pending=null,pendingEntry=null;
 function localGet(){
   if(window.storage&&window.storage.get){return window.storage.get(LB_KEY,true).then(r=>r&&r.value?JSON.parse(r.value):[]).catch(()=>[]);}
