@@ -390,7 +390,9 @@ function spawnRow(){
     const asp=DATA.vehicles[name].aspect;const w=G.laneW*0.88;const h=w*asp;
     G.ents.push({type:bus?'bus':'car',lane:l,y:-h*0.7-30*dpr,hit:false,veh:name,w:w,h:h});});
 }
-function loop(now){const dt=Math.min(48,now-G.last);G.last=now;if(G.started&&!G.over)update(dt);render();if(!G.over)raf=requestAnimationFrame(loop);}
+function loop(now){const dt=Math.min(48,now-G.last);G.last=now;
+  try{if(G.started&&!G.over)update(dt);render();}catch(err){if(window.console)console.error('frame error',err);}
+  if(!G.over)raf=requestAnimationFrame(loop);}
 function update(dt){
   G.speed=G.baseSpeed*(0.8+1.2*Math.pow(Math.min(1,G.dist/TRACK),1.35));const dy=G.speed*dt;
   G.dist+=dy;G.scroll+=dy;G.bgscroll+=dy;G.heat+=dt;
@@ -431,9 +433,16 @@ function render(){const W=cv.width,H=cv.height;
   drawHeat(W,H);
 }
 function drawBg(W,H){
-  if(!bgImg||!bgImg.complete||!bgImg.naturalWidth){ctx.fillStyle='#cdbb96';ctx.fillRect(0,0,W,H);return;}
-  const tileH=W*DATA.bg.tileAspect;let yoff=G.bgscroll%tileH;
-  for(let y=yoff-tileH;y<H+tileH;y+=tileH)ctx.drawImage(bgImg,0,y,W,tileH);
+  if(bgImg&&bgImg.complete&&bgImg.naturalWidth){
+    const tileH=W*DATA.bg.tileAspect;let yoff=G.bgscroll%tileH;
+    for(let y=yoff-tileH;y<H+tileH;y+=tileH)ctx.drawImage(bgImg,0,y,W,tileH);
+    return;
+  }
+  ctx.fillStyle='#cdbb96';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#6b6258';ctx.fillRect(G.roadL,0,G.roadW,H);
+  ctx.strokeStyle='rgba(255,214,84,.85)';ctx.lineWidth=4*dpr;ctx.setLineDash([26*dpr,26*dpr]);ctx.lineDashOffset=-(G.scroll%(52*dpr));
+  for(let i=1;i<3;i++){const x=G.roadL+G.laneW*i;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  ctx.setLineDash([]);
 }
 function drawVehicle(e){const x=laneX(e.lane);const img=VIMG[e.veh];
   ctx.save();
