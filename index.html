@@ -194,7 +194,7 @@ button{font-family:var(--font);cursor:pointer;border:none}
       <div class="drinks">Kamu kumpulin <b id="resultScore">0</b> XL Drink 🍋</div></div>
     <div class="namecap" id="nameCap">
       <label for="resultName">Masukin nama buat leaderboard</label>
-      <div class="inrow"><input id="resultName" maxlength="14" placeholder="cth: Elvi" autocomplete="off">
+      <div class="inrow"><input id="resultName" maxlength="14" placeholder="cth: Monty" autocomplete="off">
         <button class="btn" id="saveScore">Simpan</button></div>
       <div class="err" id="nameErr"></div>
     </div>
@@ -222,7 +222,7 @@ button{font-family:var(--font);cursor:pointer;border:none}
       </div>
       <div class="idfoot">MONTY&amp;Co. • Player Card</div>
       <div class="idemail" id="idEmail" style="display:none">
-        <div class="champtag">🏆 Juara #1! Kirim ID Card ke email kamu</div>
+        <div class="champtag" id="idChampTag"></div>
         <div class="inrow"><input id="idEmailInput" type="email" placeholder="email@kamu.com" autocomplete="email"><button class="idsend" id="idEmailSend">Kirim ✉️</button></div>
         <div class="idemailmsg" id="idEmailMsg"></div>
       </div>
@@ -612,9 +612,9 @@ function showIdCard(entry,list){
   $('#idScore').textContent=entry.score+' 🍋';
   const b=$('#idBadge');b.textContent=entry.finished?'FINISH 🏁':'GAME OVER';b.className='idbadge'+(entry.finished?'':' lose');
   const rank=(list||[]).findIndex(e=>e.ts===entry.ts&&e.name===entry.name)+1;
-  const em=$('#idEmail');
-  if(rank===1){em.style.display='block';$('#idEmailMsg').textContent='';$('#idEmailInput').value='';}
-  else em.style.display='none';
+  const em=$('#idEmail');em.style.display='block';
+  $('#idChampTag').textContent=rank===1?'🏆 Juara #1! Kirim ID Card ke email kamu':'Mau simpan kartu ini? Kirim ke email kamu ✉️';
+  $('#idEmailMsg').textContent='';$('#idEmailInput').value='';
   $('#idOverlay').style.display='flex';
 }
 $('#idClose').onclick=()=>{$('#idOverlay').style.display='none';$('#resultActions').style.display='flex';};
